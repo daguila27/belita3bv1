@@ -1,0 +1,61 @@
+<link rel="stylesheet" type="text/css" href="/assets/css/style_tags_grid.css">
+<div>
+<%for(var j=0; j<data.length; j++){
+	if(j == 0){%>
+		<ul id="container_all_tags">
+  			<li class='col-md-2 list-group-item' id="<%=data[j].tag.replace(' ', '_')%>" style="height: 80px;">
+      			<h3><%=data[j].tag%></h3>
+				<div class="info">
+				</div>
+     		</li>
+	<%}
+	else if(j%6==0){%>
+		</ul>
+		<ul id="container_all_tags">
+  			<li class='col-md-2 list-group-item' id="<%=data[j].tag.replace(' ', '_')%>" style="height: 80px;">
+      			<h3><%=data[j].tag%></h3>
+
+				<div class="info">
+				</div>
+     		</li>
+	<%}
+	else{%>
+		<li class='col-md-2 list-group-item' id="<%=data[j].tag.replace(' ', '_')%>" style="height: 80px;">
+      		<h3><%=data[j].tag%></h3>
+			<div class="info">
+
+			</div>
+     	</li>
+	<%}
+	if(j == data.length-1){%>
+		</ul>
+<%}}%>
+</div>
+
+<script type="text/javascript">
+	var select = false;
+	$('ul li').on('click', function(){
+			var tag = $(this).attr('id');
+			console.log(tag);
+			if(!select){
+				$("#"+tag).css('height','160px');
+				select = true;
+				console.log(tag.replace('_',' '));
+				$.ajax({
+					type: 'POST',
+					data: {'tag': tag.replace('_', ' ')},
+					url:'/info_tag',
+					success: function(data){
+						console.log(data);
+						$("#"+tag+" .info").html(data);
+					}
+				});
+			}
+			else{	
+				$('#'+tag).css('height','80px');
+				select = false;
+			}
+
+	});
+
+</script>

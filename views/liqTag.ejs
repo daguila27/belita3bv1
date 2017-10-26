@@ -1,0 +1,51 @@
+<!-- jQuery Load -->
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!-- Bootstrap JS -->
+<script src="/assets/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-tagsinput.css">
+<script type="text/javascript" src="/assets/js/funciones.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput.js"></script>
+
+<div class="input-group" id="input_tags" style="margin-bottom: 10px">
+		<span class="input-group-addon" id="basic-addon1"></span>
+		<input data-role="tagsinput" id="Tags" type="text" class="form-control" placeholder="Tags para Liquidar" aria-describedby="basic-addon1">
+</div>
+<div style="display: flex;">
+  <label style="margin-top: 15px">Tipo de oferta: </label>
+  <select style="height: 50px; width: 140px; margin-right: 20px; margin-left: 20px" id="tipo" class="form-control" style="width: 200px; display:block; margin:15px">
+      <option value="porcentaje">Descuento (%)</option>
+      <option value="precio">Precio fijo ($)</option>    
+    </select>
+  <div class="input-group" style="width: 200px">
+  		<span class="input-group-addon" id="basic-addon1"></span>
+  		<input id="descuento" type="text" class="form-control" placeholder="Descuento o Precio" aria-describedby="basic-addon1">
+  </div>
+</div>
+<div class="regist">
+    <button type="button" class="btn btn-success">Registrar</button>
+</div>  
+<div class="containerTagLiq"></div>
+<script type="text/javascript">
+            $.ajax({
+                  type: 'GET',
+                  url: '/table_liquidaciontags',
+                  success: function(data){
+                    $('.containerTagLiq').html(data);
+                  }
+                });
+  $('.regist').on('click', function(e){
+                e.preventDefault();
+                console.log("enviando ajax");
+                $.ajax({
+                  type: 'POST',
+                  data: {'tags': $('#Tags').val(), 'descuento': $('#descuento').val(), 'tipo': $('#tipo').val()},
+                  url: '/registTagLiq',
+                  success: function(data){
+                    $('.containerTagLiq').html(data);
+                  }
+                });
+          });
+</script>

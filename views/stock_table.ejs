@@ -1,0 +1,54 @@
+<!-- /.panel-heading -->
+<div class="panel-body">
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cantidad</th>
+                                        <th>Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <%for(var k=0;k < data.length; k++){%>
+                                    <tr class="odd gradeX">
+                                        <td style="padding-left: 11px; padding-top: 11px;font-size: 20px"><%=data[k].nombre%></td>
+                                        <td><%=data[k].cantidadtotal%></td>
+                                        <td><form action="/product_details" method='post'>
+                                              <input type="hidden" name="idProducto" value="<%=data[k].id_producto%>">
+                                              <button class='btn btn-default' type="submit">
+                                                <span class='glyphicon glyphicon-option-horizontal' aria-hidden='true'></span>
+                                              </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <%}%>    
+                                  </tbody>
+                            </table>
+</div>
+<!-- /.panel-body -->
+
+
+
+
+
+<!--<ul id="container_all_products">
+  <%for(var i=0; i < data.length; i++){%>
+    <li style="display: flex;" class='list-group-item'>
+      	
+      	<div style="width: 50%"><h3><b>Nombre: </b><%=data[i].nombre%></h3></div>
+      	
+      	<div style="width: 45%"><h4><b>Cantidad: </b><%=data[i].cantidadtotal%></h4></div>
+        
+      	<div style="width: 9%" class="option" >
+          <form action="/product_details" method='post'>
+            <input type="hidden" name="idProducto" value="<%=data[i].id_producto%>">
+            <button class='btn btn-default' type="submit">
+            	<span class='glyphicon glyphicon-option-horizontal' aria-hidden='true'></span>
+            </button>
+          </form>
+        </div>
+      
+    </li>
+  <%}%>
+</ul>-->
+

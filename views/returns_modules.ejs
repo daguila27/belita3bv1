@@ -1,0 +1,76 @@
+<%- include layouts/admin_header.ejs %>
+<h1 class="page-header">Devoluciones: </h1>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+<h3 style="margin-left: 20px">Ingrese número de venta:</h3>
+<div class="input-group" id="input_tags" style="margin-bottom: 20px">
+	<span class="input-group-addon" id="basic-addon1"></span>
+	<input data-role="tagsinput" id="CodigoVenta" type="text" class="form-control" placeholder="Codigo de venta" aria-describedby="basic-addon1">
+</div>
+
+
+<div class="container_sale">
+	
+</div>
+
+<script type="text/javascript">
+	$('#CodigoVenta').on('keyup', function(e){
+		e.preventDefault();
+		$.ajax({
+			type: 'POST',
+			data: {'codVenta': $('#CodigoVenta').val(), 'type': 0},
+			url: '/find_sale',
+			success: function(data){
+				$('.container_sale').html(data);
+			}
+		});
+	});
+
+	  $(document).on('click', '.delete', function(e){
+	    e.preventDefault();
+	    $.ajax({
+	      type: 'POST',
+	      data: {'id_venta': $('#CodigoVenta').val()},
+	      url: '/remove_sale',
+	      success: function(data){
+	        if(data == 'ok'){   
+	   				$.ajax({
+						type: 'POST',
+						data: {'codVenta': $('#CodigoVenta').val()},
+						url: '/find_sale',
+						success: function(data){
+							$('.container_sale').html(data);
+						}
+					});         
+	        }
+	      }
+	    });
+	  });
+	$(document).on('click', '.deleteProduct', function(e){
+		e.preventDefault();
+		var cod = $(this).attr('id');
+		var low = $("#"+cod+" #preProducto").val();
+		console.log(cod);
+		console.log(low);
+		$.ajax({
+			type: 'POST',
+			data: {'codigoProducto': cod, 'precio': low, 'idVenta': $('#idVenta').val()},
+			url: '/delete_for_sale',
+			success: function(data){
+				if(data == 'success'){
+					$.ajax({
+						type: 'POST',
+						data: {'codVenta': $('#idVenta').val()},
+						url: '/find_sale',
+						success: function(data){
+							$('.container_sale').html(data);
+						}
+					});
+				}
+			}
+		});
+	});
+</script>
+
+
+
+<%- include layouts/footer.ejs %>

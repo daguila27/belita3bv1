@@ -1,0 +1,55 @@
+<%if(login_admin){%>
+	<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+	<%- include layouts/user_header.ejs%>
+<%}%>
+<h1 class="page-header">Detalle de Producto:</h1>
+<table class="table table-responsive">
+        <tr>
+            <th>Producto</th>
+            <th>Proveedor</th>
+            <th>Fecha de registro</th>
+            <th>Cantidad</th>
+            <th>Precio ($)</th>
+            <th></th>
+        </tr>
+        <%for(var j=0; j< data.length; j++){
+        	 var mes = parseInt(data[j].Fecha.getMonth()) + 1;
+        	var f = data[j].Fecha.getDate()+"/"+mes+"/"+data[j].Fecha.getFullYear();%>
+        	<tr>
+                <td><%=data[j].nombre%></td>
+                <td><%=data[j].Nombre_proveedor%></td>
+                <td><%=f%></td>
+                <td><%=data[j].cantidad%></td>
+                <td>$<%=data[j].precio%></td>
+                <td>
+                    
+                    <div class="buttons">
+
+                        <div class="barcode" id="bc<%=data[j].id_producto%>">
+                            
+                            <form method="post" action="/barCodes" target="_blank">
+	                              
+	                              <input type="hidden" name="Precio" id="precioCode<%=data[j].id_producto%>" value="<%=data[j].precio%>">
+	                              <input type="hidden" name="Nombre" value="<%=data[j].nombre%>">
+	                              <input type="hidden" name="idP" value="<%=data[j].id_producto%>">
+	                              <input type="hidden" name="Cant" value="<%=data[j].cantidadtotal%>">
+	                              <input type="hidden" name="idF" value="<%=data[j].id_Factura%>">
+	                              <input type="hidden" name="indice_bulto" value="<%=data[j].indice_bulto%>">
+	                            
+	                            <button class='btn btn-default' type="submit">
+	                              <span class='glyphicon glyphicon-barcode' aria-hidden='true'></span>
+	                            </button>
+                              	<input style="width: 35px" type="number" name="fontSize" value="40">
+                            </form>
+                            
+                        </div>
+                            
+                    </div>
+                </td>
+            </tr>
+        <%}%>    
+</table>
+
+<%- include layouts/footer.ejs %>

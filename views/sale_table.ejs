@@ -1,0 +1,82 @@
+
+<!-- jQuery Load -->
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<div class="table-responsive" id="tabla_productos">
+    <table class="table table-bordered" id="list_product">
+            <tr id="head">
+              <td><b>Producto</b></td>
+              <td><b>Precio(CLP)</b></td>
+              <td><b>Tipo de Descuento</b></td>
+              <td><b>Descuento(% o $)</b></td>
+              <td><b>Precio Final</b></td>
+            </tr>
+            <%for(var i=0; i<data.length; i++){
+              if(data[i] != null){%>
+              <tr>
+                <td><%=data[i].nombre%></td>
+                <td>$<%=data[i].precio%><input type="hidden" id="precio<%=i%>" value="<%=data[i].precio%>"></td>
+                <td>
+                  <select id="descuento<%=i%>">
+                    <option value="porcentaje">Porcentaje</option>
+                    <option value="precio">Precio fijo</option>
+                  </select>
+                </td>
+                <td><input type="number" class="descuento" id="descuento<%=i%>"></td>
+                <td><div id="finalPrice<%=i%>"><%=data[i].precioFinal%></div></td>
+                <td><div class="delete" id="<%=i%>">
+                      <button class='btn btn-default'>
+                            <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+                      </button>
+                </div></td>
+              </tr>
+            <%}}%>  
+            <tr id="head">
+              <input type="hidden" id="precioVenta" value="<%=Costo%>">
+              <td style="display: flex;"><b>Costo: </b>$<div class="costoTotal"><%=Costo%></div></td>
+              
+            </tr>     
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    $('.descuento').on('keyup', function(e){
+          e.preventDefault();
+          var indice = $(this).attr('id').substring(9);
+          if($('#descuento'+indice).val() == 'porcentaje'){
+              var precio = parseInt($(this).val())/100;
+              precio = precio*parseInt($('#precio'+indice).val());
+              var final = parseInt($('#precio'+indice).val()) - precio;
+              console.log("precio final: " + final);
+              $('#finalPrice'+indice).html("$"+final);
+              $.ajax({
+                type: 'POST',
+                data: {'indice': indice, 'nuevoPrecio': final},
+                url: '/refreshData',
+                success : function(data){
+                    $('.costoTotal').html(data);
+                }
+              });
+          }
+          else if($('#descuento'+indice).val() == 'precio'){
+                console.log("AQUI SE FIJA UN PRECIO");
+                var precio = $(this).val();
+                console.log('Precio final: '+ precio);
+                $('#finalPrice'+indice).html("$"+precio);
+                $.ajax({
+                type: 'POST',
+                data: {'indice': indice, 'nuevoPrecio': precio},
+                url: '/refreshData',
+                success : function(data){
+                    $('.costoTotal').html(data);
+                }
+                });
+          }
+    });
+    
+</script>

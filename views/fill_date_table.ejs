@@ -1,0 +1,37 @@
+<div style="display: flex; width: 50%; margin-bottom: 20px">
+  <div>
+      <input id="date" type="date" class="form-control" placeholder="Ingrese Fecha">
+  </div>
+  <input  class="btn btn-primary" type="button" value="Buscar" id="buttonDate">
+  <div>
+    <input  class="btn btn-primary" type="button" value="Imprimir Reporte" id="report" disabled>    
+  </div>
+</div>
+<div class="container_info">
+  
+</div>
+
+<script type="text/javascript">
+  $('#buttonDate').on('click', function(e){
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        data: {'fecha': $('#date').val()},
+        url: '/table_saleDate',
+        success: function(data){
+          $('.container_info').html(data);
+          $('#report').prop('disabled', false);
+        }
+      });
+  });
+  $("#report").on('click', function(e){
+    $.ajax({
+      type: 'POST',
+      data: {'fecha': $('#date').val()},
+      url: '/voucher_report',
+      success: function(data){
+        alert("Reporte del día " + $('#date').val() +" impreso correctamente.");
+      }
+    });
+  });
+</script>

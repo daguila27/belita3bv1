@@ -1,0 +1,9 @@
+<%if(success == 'true'){%>
+	<div style="display: flex; margin-top: 2px; margin-bottom: 13px; padding: 0">
+		<h3 style="width: 40%">Nombre: <%=data[0].nombre%></h3>
+		<h3 style="width: 40%">Precio: $<%=data[0].precio%></h3>
+	</div>
+<%}
+else{%>
+	<h1>Producto no identificado</h1>
+<%}%>

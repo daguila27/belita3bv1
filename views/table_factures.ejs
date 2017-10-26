@@ -1,0 +1,110 @@
+<table class="table table-responsive">
+        <tr>
+            <th>Numero de documento</th>
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Costo</th>
+            <th>Iva</th>
+            <th>Bultos</th>
+            <th></th>
+        </tr>
+        <%for(var i=0; i<data_f.length; i++){ 
+        if(!data_f[i].Ready){%>
+            <tr>
+                <%if(data_f[i].Num_Documento==null){%>
+                    <td>No ingresado</td>
+                <%}
+                else{%>
+                    <td><%=data_f[i].Num_Documento%></td>
+                <%}
+                var name;
+                for(var j=0; j<data_p.length; j++){
+                if(data_p[j].Rut_proveedor == data_f[i].Rut_Proveedor){
+                    name = data_p[j].Nombre_proveedor;
+                %>
+                <td><%=data_p[j].Nombre_proveedor%></td>
+                <%}
+                }%>
+                <td><%= new Date(data_f[i].Fecha).toLocaleDateString()%></td>
+                <td><%=data_f[i].Costo%></td>
+                <td><%=data_f[i].Iva%></td>
+                <td><%=data_f[i].Bultos%></td>
+                <td>
+                    
+                    <div class="buttons">
+                        <%if(session.codFactura == data_f[i].id_Factura ){
+                            var bultoPendiente = data_f[i].bulto_pendiente;
+                            if(bultoPendiente.length <= 1){
+                                bultoPendiente = "0" + bultoPendiente.toString();
+                            }
+                            %>
+                            <form method="post" action='/new_inventory'>
+                                <input type="hidden" name="codFactura" value="<%=data_f[i].id_Factura%>">
+                                <input type="hidden" name="nextbundle" value="<%=bultoPendiente%>">
+                                <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            </form>
+                        <%}
+                        else{
+                            var bultoPendiente = data_f[i].bulto_pendiente;
+                            if(bultoPendiente.length <= 1){
+                                bultoPendiente = "0" + bultoPendiente.toString();
+                            }
+                        %>
+                            <form method="post" action='/new_inventory'>
+                                <input type="hidden" name="codFactura" value="<%=data_f[i].id_Factura%>">
+                                <input type="hidden" name="nextbundle" value="<%=bultoPendiente%>">
+                                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            </form>
+                        <%}%>
+                        <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>-->
+                    </div>
+                </td>
+            </tr>
+        <%}}%>
+    </table>
+
+    <h1 style="margin-bottom: 20px">Factura Cerradas:</h1>
+    <table class="table table-responsive">
+        <tr>
+            <th>Numero de documento</th>
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Costo</th>
+            <th>Iva</th>
+            <th>Bultos</th>
+            <th></th>
+        </tr>
+        <%for(var i=0; i<data_f.length; i++){ 
+        if(data_f[i].Ready){%>
+            <tr>
+                <%if(data_f[i].Num_Documento==null){%>
+                    <td>No ingresado</td>
+                <%}
+                else{%>
+                    <td><%=data_f[i].Num_Documento%></td>
+                <%}
+                var name;
+                for(var j=0; j<data_p.length; j++){
+                    if(data_p[j].Rut_proveedor == data_f[i].Rut_Proveedor){
+                        name = data_p[j].Nombre_proveedor;
+                    %>
+                    <td><%=data_p[j].Nombre_proveedor%></td>
+                    <%}
+                }%>
+                <td><%= new Date(data_f[i].Fecha).toLocaleDateString()%></td>
+                <td><%=data_f[i].Costo%></td>
+                <td><%=data_f[i].Iva%></td>
+                <td><%=data_f[i].Bultos%></td>
+                <td>
+                    
+                    <div class="buttons">
+                            <form method="post" action='/details_factura'>
+                                <input type="hidden" name="codFactura" value="<%=data_f[i].id_Factura%>">
+                                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
+                            </form>
+                        <!--<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>-->
+                    </div>
+                </td>
+            </tr>
+        <%}}%>
+    </table>

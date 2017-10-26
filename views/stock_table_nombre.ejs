@@ -1,0 +1,63 @@
+<%if(login_admin){%>
+<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+  <%- include layouts/user_header.ejs%>
+<%}%>
+<h1 class="page-header">Resultados: <%=busqueda%></h1>
+<input type="hidden" id="busqueda" value="<%=busqueda%>">
+<button id="printStock">Imprimir Stock</button>
+<div style="margin: 30px;">
+<h3 class="page-header">Stock local:</h3>
+<ul id="container_all_products">
+  <%for(var i=0; i < data.length; i++){%>
+    <li style="display: flex;" class='list-group-item'>
+      	
+      	<div style="width: 50%"><h3><b>Nombre: </b><%=data[i].nombre%></h3></div>
+      	
+      	<div style="width: 45%"><h4><b>Cantidad: </b><%=data[i].cantidadtotal%></h4></div>
+        
+      	<div style="width: 9%" class="option" >
+          <form action="/product_details" method='post'>
+            <input type="hidden" name="idProducto" value="<%=data[i].id_producto%>">
+            <button class='btn btn-default' type="submit">
+            	<span class='glyphicon glyphicon-option-horizontal' aria-hidden='true'></span>
+            </button>
+          </form>
+        </div>
+      
+    </li>
+  <%}%>
+</ul>
+</div>
+
+
+<div style="margin: 30px;">
+<h3 class="page-header">Importaciones:</h3>
+<ul id="container_all_products">
+  <%for(var i=0; i < data_importaciones.length; i++){%>
+    <li style="display: flex;" class='list-group-item'>
+        
+        <div style="width: 33.3%"><h4><b>Nombre: </b><%=data_importaciones[i].nombre_importacion%></h4></div>
+        
+        <div style="width: 33.3%"><h4><b>Cantidad: </b><%=data_importaciones[i].cantidad_importacion%></h4></div>
+        
+        <div style="width: 33.3%"><h4><b>Precio: </b>$<%=data_importaciones[i].precio_importacion%></h4></div>
+    </li>
+  <%}%>
+</ul>
+</div>
+<script type="text/javascript">
+  $('#printStock').on('click', function(e){
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        data: {'NombreProduct': $('#busqueda').val()},
+        url: '/voucher_stock_name',
+        success: function(data){
+          alert("Imprimiendo Stock.");
+        }
+      });
+  });
+</script>
+<%- include layouts/footer.ejs %>

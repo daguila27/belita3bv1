@@ -1,0 +1,111 @@
+<%- include layouts/admin_header.ejs %>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+<h1 class="page-header">Proveedores:</h1>
+
+<div class="new_provider">
+    <div class="input-group">
+      <span class="input-group-addon" id="sizing-addon2"></span>
+      <input id="Rut" type="number" class="form-control" placeholder="Rut de la Empresa (Sin digito verificador)" aria-describedby="sizing-addon2">
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon" id="sizing-addon2"></span>
+      <input id="Nombre" type="text" class="form-control" placeholder="Nombre del Proveedor" aria-describedby="sizing-addon2">
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon" id="sizing-addon2"></span>
+      <input id="Telefono" type="text" class="form-control" placeholder="Telefono" aria-describedby="sizing-addon2">
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon" id="sizing-addon2"></span>
+      <input id="Direccion" type="text" class="form-control" placeholder="Direccion" aria-describedby="sizing-addon2">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon" id="sizing-addon2"></span>
+      <input id="Mail" type="text" class="form-control" placeholder="Correo Electronico" aria-describedby="sizing-addon2">
+    </div>
+    
+    <div style="display: flex;">
+      <button style="display: inline;" id="add_provider" class='btn btn-default' type="button" ><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>Registrar</button>
+      <button style="display: inline;" id="cancel" class='btn btn-default' type="button" ><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Cancelar</button>
+    </div>
+</div>
+
+
+<div class="col-md-10">
+
+<ul>
+  <style type="text/css">
+    #plus_provider:hover{
+      background-color: rgb(240, 240, 240);
+      cursor: pointer;
+    }
+  </style>
+  <li id="plus_provider" class="list-group-item" style="display: flex">  
+    <h2 style="width: 100%; text-align: center;"><span class="glyphicon glyphicon-plus"></span>Agregar Proveedor</h2>
+  </li>
+</ul>
+
+<div id="container_provider">
+  
+</div>
+</div>
+
+
+<script type="text/javascript">
+    $.ajax({
+      type: 'GET',
+      url: '/render_provider',
+      success: function(data){
+              $('#container_provider').html(data);
+      }
+    });
+
+
+
+    $(document).on('click','#plus_provider', function(e){
+      e.preventDefault();
+      //transform: translateY(700px);
+      $('.new_provider').css('transform', 'translateY(700px)');
+      $('#Rut').focus();
+    });
+    $(document).on('click', '#add_provider', function(e){
+      e.preventDefault();
+      var rut = $("#Rut").val();
+      var nombre = $("#Nombre").val();
+      var dir = $("#Direccion").val();
+      var tel = $("#Telefono").val();
+      var mail = $('#Mail').val();
+      if(nombre != '' || rut != ''){
+       $.ajax({
+          type: 'POST',
+            data: {'nombre': nombre,'rut': rut, 'telefono': tel, 'direccion': dir, 'mail': mail},
+            url: '/save_provider',
+            success: function(data){   
+                      $('#container_provider').html(data);
+                  }
+          });
+        }
+      $('.new_provider').css('transform', 'translateY(-500px)');
+      $('#Nombre').val('');
+      $('#Rut').val('');
+      $('#Telefono').val('');
+      $('#Direccion').val('');
+      $('#Mail').val('');
+    });
+    $(document).on('click', '#cancel', function(e){
+      e.preventDefault();
+      $('.new_provider').css('transform', 'translateY(-500px)');
+      $('#Nombre').val('');
+      $('#Rut').val('');
+      $('#Telefono').val('');
+      $('#Direccion').val('');
+      $('#Mail').val('');
+    });
+
+</script>
+
+<%- include layouts/footer.ejs %>

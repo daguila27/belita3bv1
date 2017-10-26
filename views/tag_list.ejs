@@ -1,0 +1,52 @@
+<%if(login_admin){%>
+<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+	<%- include layouts/user_header.ejs%>
+<%}%>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_list_tags.css">
+<script type="text/javascript" src="/assets/js/funciones_stock.js"></script>
+<h1 class="page-header">Tags:</h1>
+
+<div class="col-md-12">
+
+	<div class="input-group">
+	  <span class="input-group-addon" id="basic-addon1"></span>
+	  <input type="text" id="Tag" class="form-control" placeholder="Ingrese Tag" aria-describedby="basic-addon1">
+	</div>
+
+	<div class="container_tags" style="margin-top: 10px"></div>
+</div>
+<script type="text/javascript">
+	$.ajax({
+		type: 'GET',
+		url: '/render_list',
+		success: function(data){
+			$('.container_tags').html(data);	
+		}
+	});
+
+	$('#Tag').on('keyup', function(e){
+		if($('#Tag').val().length == 0 ){
+			$.ajax({
+				type: 'GET',
+				url: '/render_list',
+				success: function(data){
+					$('.container_tags').html(data);	
+				}
+			});			
+		}
+		else{
+			$.ajax({
+				type: 'POST',
+				data: {'tag': $('#Tag').val()},
+				url: '/render_list_like',
+				success: function(data){
+					$('.container_tags').html(data);
+				}
+			});
+		}
+	});
+</script>
+
+<%- include layouts/footer.ejs %>

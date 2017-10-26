@@ -1,0 +1,68 @@
+<%- include layouts/admin_header.ejs %>
+
+<h1 class="page-header">Detalles del ventas: <%=data[0].nombreVendedor%></h1>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+<ul id="container_provider">
+  <%for(var j=0; j< data.length; j++){
+      if(data[j].id_venta != null){
+          var mes = parseInt(data[j].fecha.getMonth()) + 1;
+        	var f = data[j].fecha.getDate()+"/"+mes+"/"+data[j].fecha.getFullYear();%>
+          <li class='list-group-item'>
+              <div class="dib">
+                <h4><b>Numero de Venta:</b> #<%=data[j].id_venta%></h4>
+                <h4><b>Fecha:</b> <%=f%></h4>
+              </div>
+              <div class="dib">
+                  <%if(data[j].rutCliente == null){%><h4><b>Cliente:</b> No registrado</h4><%}
+                  else{%><h4><b>Cliente:</b> <%=data[j].nombreCliente%></h4><%}%>
+                <h4><b>Vendedor:</b> <%=data[j].nombreVendedor%></h4>
+              </div>
+              <div class="dib">
+                <h4><b>Metodo de Pago: </b><%=data[j].pago%></h4>
+                <h4><b>Monto: </b>$<%=data[j].monto%></h4>
+              </div>
+              <div class="detalles" id="<%=data[j].id_venta%>" data-top="<%=j%>">
+                  <input type="hidden" id="codVenta" value="<%=data[j].id_venta%>">
+                  <input type="hidden" id="type" value="1">
+                  <button class='btn btn-default'>
+                      <span class='glyphicon glyphicon-th-list' aria-hidden='true'></span>  Detalles
+                  </button>
+              </div>
+            </li>
+      <%}
+  }%>
+</ul>
+
+<div class="container_details" style="background-color: rgb(235, 235, 235); position: absolute; right: 15%; top: -200%; transition: 1s; width: 70%; padding: 10px; box-shadow: 10px 10px 5px #888888; border: solid 1px; ">
+  <div class="container" style="position: relative; width: 100%"></div>
+  <div class='ok'><button class='btn btn-default'><span class='glyphiconglyphicon-th-list' aria-hidden='true'></span>OK</button></div>
+</div>
+
+<script type="text/javascript">
+  $('.detalles').on('click', function(e){
+      e.preventDefault();
+      var id = $(this).attr('id');
+      var position = $(this).data('top');
+      console.log(position);
+      var top = 50 + position*90;
+      $.ajax({
+        type: 'POST',
+        data: {'codVenta': $('#'+id+' #codVenta').val(),'type': $('#'+id+' #type').val()},
+        url: '/find_sale',
+        success: function(data){
+            $('.container').html(data);
+            $('.container_details').css('top', top+'px');
+        }
+      });
+
+  });
+  $('.ok').on('click', function(e){
+          e.preventDefault();
+          $('.container_details').css('top', '-200%');
+  });
+</script>
+
+
+
+<%- include layouts/footer.ejs %>

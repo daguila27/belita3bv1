@@ -1,0 +1,42 @@
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+<ul id="container_provider">
+  <%for(var i=0; i < data.length; i++){%>
+      <li class='list-group-item' id="<%=data[i].Rut_proveedor%>">
+        <div class="dib">
+          <h4><b>Nombre:</b> <%=data[i].Nombre_proveedor%></h4>
+          <h4><b>Rut:</b> <%=data[i].Rut_proveedor%></h4>
+        </div>
+        <div class="dib">
+          <h5><b>Telefono:</b> <%=data[i].Telefono%></h5>
+          <h5><b>Direccion:</b> <%=data[i].Direccion%></h5>
+          <h5><b>Mail:</b> <%=data[i].Mail%></h5>
+        </div>
+      	<div class="buttons">
+      	
+      		<button class='btn btn-default' type="button"><span class='glyphicon glyphicon-barcode' aria-hidden='true'></span></button>
+      	
+      		<div class="delete" id="boton<%=data[i].Rut_proveedor%>"><button class='btn btn-default' type="button"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></div>
+      
+      	</div>
+      </li>
+  <%}%>
+</ul>
+
+
+<script type="text/javascript">
+    $(document).on('click','.delete', function(e){
+            e.preventDefault();
+            var rut = $(this).attr('id').substring(5);
+            $.ajax({
+              type: 'POST',
+              data: {'id_provider': rut},
+              url: '/delete_provider',
+              success: function(data){
+                    $('#container_provider').html(data);
+              }
+            });
+    });
+</script>
+

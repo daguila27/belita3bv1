@@ -1,0 +1,37 @@
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+<h1>Liquidaciones actuales: </h1>
+    <ul id="container_provider">
+      <%for(var i=0; i < data.length; i++){%>
+          <li class='list-group-item' id="<%=data[i].rutCliente%>">
+          	<div class="dib">
+              <h4><b>Codigo de producto:</b> <%=data[i].codigo_producto_liquidacion%></h4>
+            </div>
+            <div class="dib">
+              <h5><b>Precio:</b> $<%=data[i].precio_liquidacion%></h5>
+            </div>
+          	<div class="deleteliquidacion" id="<%=i%>">
+                <button id="<%=data[i].codigo_producto_liquidacion%>" class='btn btn-default' type="button"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button>
+            </div>
+          
+          </li>
+      <%}%>
+    </ul>
+<script type="text/javascript">
+
+  $('.deleteliquidacion').on('click', function(e){
+          e.preventDefault();
+          console.log('aqui');
+          var id = $(this).attr('id');
+          var cod = $('#'+id+' button').attr('id');
+          $.ajax({
+            type: 'POST',
+            data: {'codigo': cod},
+            url: '/removeLiq',
+            success: function(data){
+              alert('Producto eliminado de liquidaciones, por favor recarge la página.');
+            }
+          });
+    });
+</script>
+

@@ -1,0 +1,5 @@
+AL ACTUALIZAR EL SISTEMA RECORDAR:
+	->Hacer cambio en el archivo BarCodes.ejs.
+	->Cambiar los datos de ingreso a la base de datos.
+	->Comentar y actualizar los respectivos require de los archivos hostingTo4O y hostingToSA.
+	->Cambiar condicional en funcion findforsale.

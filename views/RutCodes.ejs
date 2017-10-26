@@ -1,0 +1,36 @@
+<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+<!-- jQuery Load -->
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_printer.css">
+<script src="/assets/js/JsBarcode.all.min.js"></script>
+<div class="master" style="margin: 0, padding: 0; ">
+		<div class="dad">
+			<div style="margin-left: 30px">
+				<canvas class="barcode" id="<%=rut%>"></canvas>
+				<p><%=nombre%></p>
+			</div>
+			<div style="margin-left: 70px">
+			</div>
+		</div>
+</div>
+<script type="text/javascript">
+			$(document).ready(function(){
+				$(".barcode").each(function(){
+					$(this).JsBarcode($(this).attr('id'),{
+						width: 4,
+						height: 170,
+						quite: 10,
+						format: "CODE128",
+						displayValue: true,
+						fontOptions: "",
+						font:"monospace",
+						textAlign:"center",
+						fontSize: 35,
+						backgroundColor:"",
+						lineColor:"#000"
+						});
+					});
+				});
+		</script>
+<input type="button" name="imprimir" value="Imprimir" onclick="window.print();">

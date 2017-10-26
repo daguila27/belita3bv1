@@ -1,0 +1,22 @@
+<%for(var i=0; i < data.length; i++){%>
+    <li class='list-group-item' style="display: flex;">
+      <input type="hidden" id="codigoProducto" value="<%=data[i].codigo_producto%>">
+      <div class="dib">
+          <h4><b>Nombre del producto:</b> <%=data[i].nombre%></h4>
+      </div>
+      <div class="dib">
+          <h4><b>Precio de venta:</b> $<%=data[i].precio%></h4>
+      </div>
+      <%if(type == 0){%>
+        <div class="deleteProduct" id="<%=data[i].codigo_producto%>">
+            <input type="hidden" id="codProducto" value="<%=data[i].codigo%>">
+            <input type="hidden" id="preProducto" value="<%=data[i].precio%>">
+            <button class='btn btn-default' type="submit" >
+                <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+            </button>
+        </div>
+      <%}%>
+      </li>
+<%}%>
+
+

@@ -1,0 +1,78 @@
+<%- include layouts/admin_header.ejs %>
+
+<h1 class="page-header">Descuentos y Liquidaciones:</h1>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+
+<div style="display: flex;"> 
+<h4 style="height: 50px">Descuentos por:</h4>
+  <select style="height: 50px; width: 140px; margin-right: 20px; margin-left: 20px" id="buscar" onchange="cambiar()" class="form-control" style="width: 200px; display:block; margin:15px">
+    <option value="Tags">Tags </option>
+    <option value="Codigo">Codigo de Barra</option>    
+  </select>
+</div>
+
+<div class="container_liq">
+</div>
+
+
+<script type="text/javascript">
+$.ajax({
+            type: 'GET',
+            url: '/LiquidarTag',
+            success: function(data){
+                $('.container_liq').html(data);
+            }
+           });
+    /*$('#buscar_button').on('click', function(e){
+        e.preventDefault();
+        if($('#buscar').val() == 'Codigo'){
+          $.ajax({
+            type: 'GET',
+            url: '/LiquidarCod',
+            success: function(data){
+              $('.container_liq').html(data);
+            }
+          });
+        }
+        else if($('#buscar').val() == 'Tags'){
+           $.ajax({
+            type: 'GET',
+            url: '/LiquidarTag',
+            success: function(data){
+                $('.container_liq').html(data);
+            }
+           });
+        }  
+    });*/
+
+    function cambiar(){
+      $(function(){
+          if($('#buscar').val() == 'Codigo'){
+            $.ajax({
+              type: 'GET',
+              url: '/LiquidarCod',
+              success: function(data){
+                $('.container_liq').html(data);
+              }
+            });
+          }
+        else if($('#buscar').val() == 'Tags'){
+             $.ajax({
+              type: 'GET',
+              url: '/LiquidarTag',
+              success: function(data){
+                  $('.container_liq').html(data);
+              }
+             });
+        } 
+      });
+    }
+
+    
+</script>
+
+
+
+
+<%- include layouts/footer.ejs %>

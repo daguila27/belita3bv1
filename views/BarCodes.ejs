@@ -1,0 +1,72 @@
+
+<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+<!-- jQuery Load -->
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_printer.css">
+<script src="/assets/js/JsBarcode.all.min.js"></script>
+<div class="master" style="margin: 0, padding: 0; ">
+	<input type="hidden" id="fontSize" value="<%=fontSize%>">
+	<%
+	function extend_zeros(Integer, large){
+		var loop = large - Integer.toString().length;//EL NUMERO DE CEROS QUE DEBEMOS AGREGAR
+		var result = "";
+		for(var i=0; i<loop; i++){
+				result += "0";
+			}
+		result += Integer.toString();
+		return result;
+		}
+	for(var i=0; i<Cantidad; i++){%>
+	<%if(i%2==0){
+		var codeI = "";
+		var codeII = "";
+		var code = extend_zeros(Indice_Bulto, 2);
+		code += extend_zeros(codFactura, 5);
+		code += extend_zeros(codeProduct, 6);
+
+		if(i == Cantidad - 1){
+			codeI = extend_zeros(i, 2);
+			codeII = "...";	
+		}
+		else{
+			codeI = extend_zeros(i, 2);
+			codeII = extend_zeros(i+1, 2);
+		}
+		%>
+		<div class="dad">
+			<div style="margin-left: 30px">
+				<canvas style="height: 160px" class="barcode" id="<%=code%><%=indice_tienda%><%=codeI%>"></canvas>
+				<p class="name"><%=nombre%></p>
+				<p>$<%=precio%></p>
+			</div>
+			<div style="margin-left: 70px">
+				<canvas style="height: 160px" class="barcode"  id="<%=code%><%=indice_tienda%><%=codeII%>"></canvas>
+				<p class="name"><%=nombre%></p>
+				<p>$<%=precio%></p>
+			</div>
+		</div>
+	<%}%>	
+	<%}%>
+</div>
+<script type="text/javascript">
+			$(document).ready(function(){
+				$('.name').css('font-size', $('#fontSize').val());
+				$(".barcode").each(function(){
+					$(this).JsBarcode($(this).attr('id'),{
+						width: 4,
+						height: 170,
+						quite: 10,
+						format: "CODE128",
+						displayValue: true,
+						fontOptions: "",
+						font:"monospace",
+						textAlign:"center",
+						fontSize: 35,
+						backgroundColor:"",
+						lineColor:"#000"
+						});
+					});
+				});
+		</script>
+<!--<input type="button" name="imprimir" value="Imprimir" onclick="window.print();">-->

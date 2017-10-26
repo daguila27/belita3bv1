@@ -1,0 +1,64 @@
+<%- include layouts/admin_header.ejs %>
+
+<h1 class="page-header">Datos de ventas:</h1>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+
+<div style="display: flex;"> 
+<h4 style="height: 50px">Filtrar:</h4>
+  <select style="height: 50px; width: 140px; margin-right: 20px; margin-left: 20px" id="filtro" class="form-control" style="width: 200px; display:block; margin:15px">
+    <option value="Todas">Todas la ventas</option>
+    <option value="Vendedor">Ventas por Vendedor</option>
+    <option value="Fecha">Ventas por fecha</option>    
+  </select>
+  <input  style="height: 50px" class="btn btn-primary" type="button" value="Filtrar" id="filtro_button">
+</div>
+
+<div class="container_list">
+</div>
+
+
+<script type="text/javascript">
+  $.ajax({
+          type: 'GET',
+          url:'/sale_details',
+          success: function(data){
+            $('.container_list').html(data);
+          }
+      });
+  $("#filtro_button").on('click', function(e){
+    e.preventDefault();
+    if($("#filtro").val() == "Todas"){
+      $.ajax({
+          type: 'GET',
+          url:'/sale_details',
+          success: function(data){
+            $('.container_list').html(data);
+          }
+      });
+    }
+    else if($("#filtro").val() == "Vendedor"){
+      $.ajax({
+          type: 'GET',
+          url: '/fill_seller',
+          success: function(data){
+            $('.container_list').html(data);
+          }
+      });
+    }
+    else if($("#filtro").val() == "Fecha"){
+      $.ajax({
+          type: 'GET',
+          url: '/fill_date',
+          success: function(data){
+            $('.container_list').html(data);
+          }
+      });
+    }
+  });   
+</script>
+
+
+
+
+<%- include layouts/footer.ejs %>

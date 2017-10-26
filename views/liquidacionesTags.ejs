@@ -1,0 +1,57 @@
+
+
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+
+<div class="table-responsive" id="tabla_productos" style="margin-top: 50px">
+    <table class="table table-bordered">
+            <tr id="head" >
+              <td style="background-color: rgb(220, 220, 200); "><b>Tags</b></td>
+              <td style="background-color: rgb(220, 220, 200); "><b>Tipo de descuento</b></td>
+              <td style="background-color: rgb(220, 220, 200); "><b>Eliminar</b></td>
+            </tr>
+          <%for(var i=0; i <datos.length; i++){%>
+                <tr>
+                    <td>
+                      <div class="input-group" id="input_tags">
+                          <input id="Tags" value="<%=datos[i].tag_liquidacion%>"  style="border: none; background-color: white; font-size: 20px" disabled>
+                      </div> 
+                    </td>
+                    <%if(datos[i].tipo == 'porcentaje'){%>
+                          <td><%=datos[i].descuento%>% de descuento.</td>
+                    <%}
+                    else{%>
+                          <td>$<%=datos[i].descuento%> precio de venta.</td>
+                    <%}%>
+                    <td>
+                        <!--<button class='btn btn-default'>
+                              <span class='glyphicon glyphicon-floppy-saved' aria-hidden='true'></span>
+                          </button>-->
+                        <div class="delete" id="<%=datos[i].id_tag_liquidacion%>">
+                          <button class='btn btn-default'>
+                              <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+                          </button>
+                        </div>
+                    </td>   
+                </tr>
+          <%}%>         
+    </table>
+</div>
+<script type="text/javascript">
+  
+
+  $('.delete').on('click', function(e){
+                e.preventDefault();
+                console.log("AQUI");
+                var id = $(this).attr('id');
+                $.ajax({
+                  type: 'POST',
+                  data: {'id': id},
+                  url: '/remove_tagLiquidacion',
+                  success: function(data){
+                    alert("Por favor recarge la página");
+                  }
+                });
+  });
+</script>

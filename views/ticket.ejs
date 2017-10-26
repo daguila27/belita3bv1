@@ -1,0 +1,16 @@
+<%- include layouts/admin_header.ejs %>
+
+<div style="display: flex; width:100%">
+    <h3 style="width:30%"><%=id_Factura%></h3>
+    <h3 style="width:30%">Factura</h3>
+    <h3 style="width:30%; text-aling: center"><%=datos.Fecha%></h3>
+</div>
+<div>
+    <%
+    var total = datos.Costo*(datos.Iva/100) + (datos.Costo/1);
+    %>
+    <h3 style="width:30%">Costo: <%=datos.Costo%></h3>
+    <h3 style="width:30%">IVA: <%=datos.Iva%></h3>
+    <h3 style="width:30%; text-aling: center">Total: <%=total%></h3>
+</div>
+<%- include layouts/footer.ejs %>

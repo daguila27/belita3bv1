@@ -1,0 +1,133 @@
+<%- include layouts/admin_header.ejs %>
+<link href="/assets/css/style_inventory.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-tagsinput.css">
+<script type="text/javascript" src="/assets/js/funciones.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput-angular.js"></script>
+<div class="proveedor">
+  <div style="display: flex;">
+    <h3 style="height: 50px" class="pageheader">Nuevo Inventario:</h3><h4 style="height: 50px; margin-left: 10px;margin-top: 26px" class="pageheader">Bulto <%=parseInt(index_bundle)+1%> de <%=allBundle%></h4>
+  </div>   
+    <input type="hidden" id="idFactura" value="<%=data_facture[0].id_Factura%>"> 
+    <input type="hidden" id="costoFactura" value="<%=data_facture[0].Costo%>">
+    <input type="hidden" id="indiceBulto" value="<%=index_bundle%>">
+    <input type="hidden" id="ProductosTotales">
+</div>
+<div>
+<label>Ingresar precio del bulto: </label>
+
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1"></span>
+          <input id="PrecioBulto" type="number" class="form-control" placeholder="Precio del Bulto" aria-describedby="basic-addon1">
+        </div>
+</div>
+
+
+
+<div class="input_product">
+        <label>Ingrese Producto:</label>
+        <div class="input-group" id="input_tags">
+		        <span class="input-group-addon" id="basic-addon1"></span>
+		        <input data-role="tagsinput" id="NombreProduct" type="text" class="form-control" placeholder="Nombre(Tags)" aria-describedby="basic-addon1">
+    		</div>
+        <div id="tag_container">
+          <div></div>
+        </div>
+		    <div class="input-group">
+		      <span class="input-group-addon" id="basic-addon1"></span>
+		      <input id="CantidadProduct" type="text" class="form-control" placeholder="Cantidad" aria-describedby="basic-addon1">
+		    </div>
+
+        <div style="width: 100%">
+          <button type="button" id="regist_button" class="btn btn-success">Registrar</button>
+        </div>  
+
+</div>
+
+
+<div class="tabla"></div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+               
+
+        //enfocamos en el input de producto
+        $('#NombreProduct').focus();
+        $.ajax({
+          type: 'GET',
+          url: '/render_table/'+$('#idFactura').val()+'/'+$('#indiceBulto').val(),
+          success: function(data){
+            $('.tabla').html(data);
+          }
+
+        });
+
+        $('#regist_button').click(function(){
+
+          if($('#CantidadProduct').val() < 100){
+              var id_factura = $('#idFactura').val();
+              var indice_bulto = $('#indiceBulto').val();
+              var cantidad = $('#CantidadProduct').val();
+              var nombre = $('#NombreProduct').val().toLowerCase();
+              var PrecioBulto = $('#PrecioBulto').val();
+              /*$.ajax({
+                type: 'POST',
+                data: {'nombre': nombre},
+                url: '/saveTags',
+                success: function(data){
+                  
+                }
+              });*/
+              $.ajax({
+                    type: 'POST',
+                    data: {'id_factura': id_factura, 'indice_bulto': indice_bulto,'cantidad': cantidad ,'nombre': nombre, 'precio_bulto': PrecioBulto},
+                    url: '/new_product',
+                    success: function(data){
+                        console.log('renderizado');
+                        $('.tabla').html(data);
+                    }
+                  });
+              /**var tags = Split(nombre, ',')
+              $.ajax({
+                  type: 'POST',
+                  data: {'tags': tags},
+                  url: '/save_tags',
+                  success: function(data){
+                          if(data = 'ok')
+                            console.log('Tags agregados correctamente...');
+                  }
+              });*/      
+              $('#CantidadProduct').val('');
+              $('.bootstrap-tagsinput input').focus();
+          }
+         else{alert("Cantidad máxima de productos: 99");} 
+        });
+        $(document).on('click', '.delete', function(e){
+              e.preventDefault();
+              var id_producto = $(this).attr('id').substring(1);
+              var cantidad = $("#c"+id_producto).val();
+              console.log(id_producto);
+              $.ajax({
+                  type: 'POST',
+                  data: {'id_producto': id_producto, 'indice_bulto': $('#indiceBulto').val(),
+                    'id_factura': $('#idFactura').val(), 'cantidad': cantidad},
+                  url: '/delete_product',
+                  success: function(data){
+                        $('.tabla').html(data);
+                  }
+              });
+        });
+        
+
+
+       
+
+  })
+      
+
+</script>
+
+<%- include layouts/footer.ejs %>

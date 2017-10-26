@@ -1,0 +1,140 @@
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_printer.css">
+<script src="/assets/js/JsBarcode.all.min.js"></script>
+
+<div class="table-responsive" id="tabla_productos">
+  <input type="hidden" id="codFactura" value="<%=codFactura%>">
+  <input type="hidden" id="thisBundle" value="<%=thisBundle%>">
+  <input type="hidden" id="productosTotales" value="<%=Sumcantidad%>">
+  <input type="hidden" id="precioBulto" value="<%=precioBulto%>">
+    <table class="table table-bordered" id="list_product">
+            <tr id="head">
+              <td><b>Producto</b></td>
+              <td><b>Precio(CLP)</b></td>
+              <td><b>Cantidad</b></td>
+              <td><b>Ganancia</b></td>
+              <td></td>
+            </tr>
+          <%for(var i=0; i<datos.length; i++){
+          if(parseInt(thisBundle) == datos[i].indice_bulto){%>
+                <tr>
+                    <td><b><%=datos[i].nombre%></b><input type="hidden" class="nombre" value="<%=datos[i].nombre%>"></td>
+                    <td class="in_text" id="<%=i%>"><b>$<input type="number" class='precioProd' id="p<%=datos[i].id_producto%>" value="<%=datos[i].precio%>"></b></td>
+                    <td><b><%=datos[i].cantidad%></b><input type="hidden" id="c<%=datos[i].id_producto%>" value="<%=datos[i].cantidad%>"></td>
+                    <td class="ganancia" id="g<%=datos[i].id_producto%>"><b></b><input type="hidden" value="0"></td>
+                    <td>
+                        <div class='buttons'>
+                          <div class="delete" id="d<%=datos[i].id_producto%>">
+                            <button class='btn btn-default'>
+                              <span class='glyphicon glyphicon-remove' aria-hidden='true'></span>
+                            </button>
+                          </div>
+                          <div class="barcode" id="bc<%=datos[i].id_producto%>">
+                            <form method="post" action="/barCodes" target="_blank">
+                              <input type="hidden" name="Precio" id="precioCode<%=datos[i].id_producto%>">
+                              <input type="hidden" name="Nombre" value="<%=datos[i].nombre%>">
+                              <input type="hidden" name="idP" value="<%=datos[i].id_producto%>">
+                              <input type="hidden" name="Cant" value="<%=datos[i].cantidad%>">
+                              <input type="hidden" name="idF" value="<%=codFactura%>">
+                              <input type="hidden" name="indice_bulto" value="<%=thisBundle%>">
+                            <button class='btn btn-default' type="submit">
+                              <span class='glyphicon glyphicon-barcode' aria-hidden='true'></span>
+                            </button>
+                              <input style="width: 35px" type="number" name="fontSize" value="40">
+                            </form>
+                            
+                          </div>    
+                        </div>
+                    </td>   
+                </tr>
+          <%}}%>
+          <tr id="head">  
+              <td></td>
+              <td></td> 
+              <td>Cantidad Total: <%=Sumcantidad%></td>
+              <td class="ganTotal">Ganancia Total: </td>
+          </tr>         
+    </table>
+</div>
+
+<div class="next">
+  <form id="sig" method="post" action="/new_inventory">
+      <input type="hidden" name="codFactura" value="<%=codFactura%>">
+      <input type="hidden" name="nextbundle" value="<%=nextbundle%>">
+  <button class='btn btn-default'>
+                <span class='glyphicon glyphicon-check' aria-hidden='true'></span>  Terminar Bulto
+      </button>
+  </form>
+</div>
+<script type="text/javascript">
+      
+
+      var precioBulto = $('#precioBulto').val();
+      var productosTotales =  $('#productosTotales').val();
+      var precioProductos = {}; 
+
+
+      $('#PrecioBulto').val(precioBulto);
+      $('.next').on('click', function(){
+        var cuenta = 0;
+          $('.in_text b input').each(function(){
+              var precio = $(this).val();
+              var idproduct = $(this).attr('id').substring(1);
+              precioProductos[cuenta] = {'id': idproduct, 'precio': precio};
+              cuenta++;
+          });
+          $.ajax({
+                type:'POST',
+                data: {'idprecio': precioProductos},
+                url: '/saveBundle',
+                success: function(data){
+                      console.log('submit');              
+                      $('#sig').submit();       
+                }
+          });
+      });
+      
+      /*$('.barcode').on('click', function(){
+          var idProducto = $(this).attr('id').substring(2);
+          var cant = $("#c"+idProducto).val();
+          var nombre = $('.nombre').val();
+          $.ajax({
+              type: 'POST',
+              data: {'idP': idProducto, 'Cant': cant, 'Nombre': nombre, 'idF': $('#codFactura').val(), 'indice_bulto': $('#thisBundle').val()},
+              url: '/barCodes',
+              success: function(data){
+                  console.log("volvio");
+                  window.open(data);
+              }
+          });
+      });*/
+
+        
+
+      $(".idprod").each(function(){
+        var idproducto = $(this).data("idprod");  
+        console.log(idproducto);
+      });
+
+      $('.precioProd').on('keyup', function(e){
+                e.preventDefault();
+                var gananciaTotal = 0;
+                var precioXproducto =  precioBulto/productosTotales; 
+                var id = $(this).attr('id').substring(1);
+                var ganancia = $("#p"+id).val() - precioXproducto;
+                $('#precioCode'+id).val($("#p"+id).val());
+                
+                $("#g"+id+" b").remove();
+                $("#g"+id).append("<b>$" + parseInt(ganancia) +"</b>");
+          
+                $('#g'+id+' input').val(ganancia);
+                $('.ganancia').each(function(){
+                    gananciaTotal += parseInt($('#'+$(this).attr('id')+' input').val())*parseInt($('#c'+$(this).attr('id').substring(1)).val());
+                });
+
+                $('.ganTotal b').remove();
+                $('.ganTotal').append("<b>$" + parseInt(gananciaTotal) + "</b>");
+                
+          });
+</script>

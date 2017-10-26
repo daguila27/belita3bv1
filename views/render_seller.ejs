@@ -1,0 +1,27 @@
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+<ul id="container_provider">
+  <%for(var i=0; i < data.length; i++){%>
+      <li class='list-group-item' id="<%=data[i].rut%>">
+      	<div class="dib"><h3>Nombre: <%=data[i].nombreVendedor%></h3></div>
+      	<div class="dib"><h3>Rut: <%=data[i].rutVendedor%></h3></div>
+      	<div class="buttons">
+      	<div class="barcod" data-rut="<%=data[i].rutVendedor%>">
+              <form method="post" action="/rutCodes" target="_blank">
+                  <input type="hidden" name="nombre" value="<%=data[i].nombreVendedor%>">
+                  <input type="hidden" name="rut" value="<%=data[i].rutVendedor%>">
+                  <button class='btn btn-default' type="submit">
+                    <span class='glyphicon glyphicon-barcode' aria-hidden='true'></span>
+                  </button>
+                </form>
+        </div>  
+      	<div class="delete" data-rut="<%=data[i].rutVendedor%>">
+            <button class='btn btn-default' type="button"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button>
+        </div>
+      
+      	</div>
+      </li>
+  <%}%>
+</ul>
+

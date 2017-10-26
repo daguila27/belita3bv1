@@ -1,0 +1,128 @@
+<%if(login_admin){%>
+<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+  <%- include layouts/user_header.ejs%>
+<%}%>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_list_seller.css">
+<script type="text/javascript" src="/assets/js/funciones_sellers.js"></script>
+<h1 class="page-header">Nuestros Clientes:</h1>
+
+<div class="new_seller">
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2"></span>
+    <input id="Rut" type="number" class="form-control" placeholder="Rut (Sin digito verificador)" aria-describedby="sizing-addon2">
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2"></span>
+    <input id="Nombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="sizing-addon2">
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2"></span>
+    <input id="telefono" type="text" class="form-control" placeholder="Telefono" aria-describedby="sizing-addon2">
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2"></span>
+    <input id="mail" type="text" class="form-control" placeholder="Correo Electronico" aria-describedby="sizing-addon2">
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2"></span>
+    <input id="fecha_nacimiento" type="date" class="form-control" placeholder="Fecha de Nacimiento (dd/mm/aaaa)" aria-describedby="sizing-addon2">
+  </div>
+  <div>
+    <button id="add_client" class='btn btn-default' type="button" ><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>Registrar</button>
+    <button id="cancelar" class='btn btn-default' type="button" ><span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Cancelar</button>
+  </div>
+</div>
+
+
+
+<div class="col-md-10">
+
+<ul>
+  <style type="text/css">
+    #plus_client:hover{
+      background-color: rgb(240, 240, 240);
+      cursor: pointer;
+    }
+  </style>
+  <li id="plus_client" class="list-group-item" style="display: flex">  
+    <h2 style="width: 100%; text-align: center;"><span class="glyphicon glyphicon-plus"></span>Agregar Cliente</h2>
+  </li>
+</ul>
+  <div class='container_list'> 
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $.ajax({
+      type: 'GET',
+      url: '/render_client',
+      success: function(data){
+                $('.container_list').html(data);
+      }
+    });
+
+
+    $(document).on('click', '#plus_client',function(e){
+      e.preventDefault();
+      //transform: translateY(700px);
+      $('.new_seller').css('transform', 'translateY(700px)');
+      $('#Rut').focus();
+    });
+
+
+    $(document).on('click', '#add_client', function(e){
+      e.preventDefault();
+      var rut = $("#Rut").val();
+      var nombre = $("#Nombre").val();
+      var telefono = $("#telefono").val();
+      var mail = $("#mail").val();
+      var fecha_nacimiento = $("#fecha_nacimiento").val();
+      $.ajax({
+            type: 'POST',
+            data: {'nombre': nombre,'rut': rut, 'telefono': telefono, 'mail':mail, 'fecha_nacimiento': fecha_nacimiento},
+            url: '/new_client',
+            success: function(data) { 
+                $('.container_list').html(data);
+              }
+      });
+      $('.new_seller').css('transform', 'translateY(-500px)');
+      $('#Nombre').val('');
+      $('#Rut').val('');
+      $('#telefono').val('');
+      $('#mail').val('');
+      $('#fecha_nacimiento').val('');
+    });
+    $(document).on('click', '#cancelar', function(e){
+      e.preventDefault();
+      $('.new_seller').css('transform', 'translateY(-500px)');
+      $('#Nombre').val('');
+      $('#Rut').val('');
+      $('#telefono').val('');
+      $('#mail').val('');
+      $('#fecha_nacimiento').val('');
+    });
+
+    $(document).on('click','.delete', function(e){
+            e.preventDefault();
+            var rut = $(this).data("rut");
+            $.ajax({
+              type: 'POST',
+              data: {'rut': rut},
+              url: '/erase_client',
+              success: function(data){
+                    $('.container_list').html(data);
+              }
+            });
+    });
+
+
+  });
+
+</script>
+
+<%- include layouts/footer.ejs %>

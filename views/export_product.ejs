@@ -1,0 +1,55 @@
+<h3 style="margin-left: 20px">Exportar producto:</h3>
+<div class="input-group" id="input_tags" style="margin-bottom: 9px">
+    <span class="input-group-addon" id="basic-addon1"></span>
+    <input id="CodigoProducto" type="text" class="form-control" placeholder="Codigo de Producto" aria-describedby="basic-addon1">
+</div>
+
+<div class="container_details"></div>
+
+<div class="input-group" id="input_tags" style="margin-bottom: 20px">
+    <span class="input-group-addon" id="basic-addon1"></span>
+    <input id="CantidadProduct" type="number" class="form-control" placeholder="Cantidad" aria-describedby="basic-addon1">
+</div>
+
+<div style="width: 100%; margin-top: 10px">
+    <button type="button" id="export_button" class="btn btn-success">Exportar producto</button>
+</div>
+ <script type="text/javascript">
+ 	$('#export_button').on('click', function(e){
+ 		e.preventDefault();
+ 		var codigo = $('#CodigoProducto').val();
+ 		var cantidad =  $('#CantidadProduct').val();
+ 			$.ajax({
+ 				type: 'POST',
+ 				data: {'codigo': codigo, 'cantidad': cantidad},
+ 				url: '/export_add',
+ 				success: function(data){
+ 					if(data == 'ok'){alert("Producto exportado correctamente")}
+ 					else if(data == 'nope'){alert("Exportacion fallida, por favor verifique el codigo del producto.");}
+ 				}
+ 			});
+ 	});
+
+	$('#CodigoProducto').on('keyup', function(e){
+		var code = $('#CodigoProducto').val().toString();
+		if(code.length == 16){
+			$('#CodigoProducto').prop('disabled', true);
+			$.ajax({
+				type: 'POST',
+				data: {'codigo': $('#CodigoProducto').val()},
+				url: '/find_import',
+				success: function(data){
+					if(data == 'nope'){
+						alert("Codigo Invalido");
+						$('#CodigoProducto').prop('disabled', false);
+					}
+					else{
+						$('.container_details').html(data);
+						$('#CodigoProducto').prop('disabled', false);
+					}
+				}
+			});
+		}
+	});
+ </script>
+

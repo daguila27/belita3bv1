@@ -1,0 +1,59 @@
+<%if(login_admin){%>
+<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+  <%- include layouts/user_header.ejs%>
+<%}%>
+<link href="/assets/css/style_voucher.css" rel="stylesheet">
+<script type="text/javascript" src="/assets/js/funciones_voucher.js"></script>
+
+<form class="form-inline" method="post" action="/generate_voucher">
+  
+
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon">Numero de Documento:</div>
+          <input name="num_documento" id="num_documento" type="number" class="form-control">
+        </div>
+        <div class="input-group">
+          <div class="input-group-addon">Costo ($):</div>
+          <input name="costo" id="costo" type="number" class="form-control">
+        </div>
+        <div class="input-group" style="margin-left: 10px; margin-right: 10px">
+          <h3>Iva: 19%</h3>
+          <input name="iva" type="hidden" value="19">
+        </div>
+        <div class="input-group">
+          <div class="input-group-addon">Bultos:</div>
+          <input name="bultos" id="bultos" type="number" class="form-control">
+        </div>
+      </div>
+
+      <div class="proveedor">
+            <p style="display:block; margin: 15px;">Proveedor:</p>
+            <select name="id_proveedor" class="form-control" style="display:block; margin:15px">
+            <%if(data.length != 0){
+                for(var i=0; i<data.length; i++){%>
+                <option value="<%=data[i].Rut_proveedor%>"><%=data[i].Nombre_proveedor%></option>
+            <%}
+            }
+            else{%>    
+                <option>No hay proveedores registrados</option>
+            <%}%>    
+            </select>
+      </div>
+      <div class="buttons">
+          <button type="submit" class="btn btn-primary">Generar</button>
+      </div>
+</form>
+
+<script type="text/javascript">
+  $('.buttons button').on('click', function(){
+        $.ajax({
+          type: 'POST',
+          data: {'iva': 19,'costo': $('#costo').val(),'bultos': $('#bultos').val()},
+          url: '/voucher'
+        });      
+  });
+</script>
+<%- include layouts/footer.ejs %>

@@ -1,0 +1,69 @@
+<%- include layouts/admin_header.ejs %>
+<link href="/assets/css/style_inventory.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-tagsinput.css">
+<script type="text/javascript" src="/assets/js/funciones.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput-angular.js"></script>
+<h1 style="height: 50px" class="pageheader">Detalles de la Factura:</h1>
+
+
+<ul class="list-group">
+  <li class="list-group-item"><b>Número de Factura: </b>#<%=datos[0].id_Factura%></li>
+  <li class="list-group-item"><b>Proveedor: </b><%=datos[0].Nombre_proveedor%></li>
+  <li class="list-group-item"><b>Costo: </b>$<%=datos[0].Costo%></li>
+  <%var total = parseInt(datos[0].Iva)/100;
+    total = total*parseInt(datos[0].Costo);
+    total += parseInt(datos[0].Costo);
+  %>
+  <li class="list-group-item"><b>Bultos: </b><%=datos[0].Bultos%></li>
+  <li class="list-group-item"><b>Total: </b>$<%=total%></li>
+</ul>
+
+
+
+<h2 style="height: 50px" class="pageheader">Productos:</h2>
+
+<div class="table-responsive">
+  <table class="table table-bordered" id="list_product">
+            <tr id="head">
+              <td><b>Producto</b></td>
+              <td><b>Precio(CLP)</b></td>
+              <td><b>Cantidad</b></td>
+              <td><b>Bulto</b></td>
+              <td></td>
+            </tr>
+          <%for(var i=0; i< datos.length; i++){%>
+                <tr>
+                    <td><b><%=datos[i].nombre%></b></td>
+                    <td><b>$<%=datos[i].precio%></b></td>
+                    <td><b><%=datos[i].cantidad%></b></td>
+                    <td><b><%=parseInt(datos[i].indice_bulto)+1%></b></td>
+                    <td>
+                        <div class='buttons'>
+                          <div class="barcode" id="bc<%=datos[i].id_producto%>">
+                            <form method="post" action="/barCodes" target="_blank">
+                              <input type="hidden" name="Precio" value="<%=datos[i].precio%>">
+                              <input type="hidden" name="Nombre" value="<%=datos[i].nombre%>">
+                              <input type="hidden" name="idP" value="<%=datos[i].id_producto%>">
+                              <input type="hidden" name="Cant" value="<%=datos[i].cantidad%>">
+                              <input type="hidden" name="idF" value="<%=datos[i].id_factura%>">
+                              <input type="hidden" name="indice_bulto" value="<%=datos[i].indice_bulto%>">
+                            <button class='btn btn-default' type="submit">
+                              <span class='glyphicon glyphicon-barcode' aria-hidden='true'></span>
+                            </button>
+                              <input style="width: 35px" type="number" name="fontSize" value="40">
+                            </form>
+                            
+                          </div>    
+                        </div>
+                    </td>   
+                </tr>
+          <%}%>        
+    </table>
+</div>
+
+
+
+
+
+<%- include layouts/footer.ejs %>

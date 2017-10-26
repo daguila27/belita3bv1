@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=page_title%></title>
+
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+<input type="text" id="buscar">
+<ul id="lista">
+	<%if(datos != null){
+	for(var i=0; i< datos.length; i++){
+		%>
+			<li id="<%=datos[i].Codigo_proveedor%>"><%=datos[i].Nombre_proveedor%></li>
+		<%}
+	}%>
+</ul>
+</body>
+<script type="text/javascript">
+
+
+	$(document).ready(function(){
+		$("#buscar").focus();
+		$("#buscar").on("keyup",function(e){
+				e.preventDefault();
+				var buscar = $("#buscar").val();
+				/*$.ajax({
+					type: 'POST',
+					data: {'buscar': buscar},
+					dataType: 'jsonp',
+	                jsonp: 'callback',
+					url: '/search_provider',
+ 	               	success: function(data) {
+ 	               		console.log(data);
+ 	               		$('#lista li').text(data);
+                	}
+				})
+				.fail(function(){
+					alert("HUBO UN ERROR");
+				});*/
+
+				$.ajax({
+                	type: 'POST',
+                	data: {'buscar': buscar},
+                	url: '/search_provider',
+                success: function(data) {
+                	var comand = "";
+                	for (var i=0; i < data.length; i++){
+                		comand += "<li>" + data[i].Nombre_proveedor + "</li>";
+                	}
+                	$("#lista").html(comand);
+                }
+            });
+
+		});
+
+	});
+</script>
+
+</html>

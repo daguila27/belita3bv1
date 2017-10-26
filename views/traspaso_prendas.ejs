@@ -1,0 +1,66 @@
+<%- include layouts/admin_header.ejs %>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-tagsinput.css">
+<script type="text/javascript" src="/assets/js/funciones.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-tagsinput-angular.js"></script>
+<h1 class="page-header">Traspaso de prendas: </h1>
+
+<div style="display: flex;"> 
+<h4 style="height: 50px">Accion:</h4>
+  <select style="height: 50px; width: 140px; margin-right: 20px; margin-left: 20px" id="accion" onchange="mostrar()" class="form-control" style="width: 200px; display:block; margin:15px">
+    <option value="Importar">Importar Producto</option>
+    <option value="Exportar">Exportar Producto</option>    
+  </select>
+</div>
+
+<!--<h3 style="margin-left: 20px">Ingrese código del producto:</h3>
+<div class="input-group" id="input_tags" style="margin-bottom: 20px">
+    <span class="input-group-addon" id="basic-addon1"></span>
+    <input id="CodigoProducto" type="text" class="form-control" placeholder="Codigo de Producto" aria-describedby="basic-addon1">
+</div>
+<div class="input-group" id="input_tags">
+    <span class="input-group-addon" id="basic-addon1"></span>
+    <input data-role="tagsinput" id="NombreProduct" type="text" class="form-control" placeholder="Nombre del Producto(Tags)" aria-describedby="basic-addon1">
+</div>
+<div style="width: 100%; margin-top: 10px">
+    <button type="button" id="regist_button" class="btn btn-success">Registrar</button>
+</div>-->
+
+
+
+<div class="container_method"></div>
+<script type="text/javascript">
+  $.ajax({
+          type: 'GET',
+          url:'/import_product',
+          success: function(data){
+            $('.container_method').html(data);
+          }
+      });
+
+
+  function mostrar(){
+    $(function(){
+        if($("select").val() == "Importar"){
+          $.ajax({
+              type: 'GET',
+              url:'/import_product',
+              success: function(data){
+                $('.container_method').html(data);
+              }
+          });
+        }
+        else if($("select").val() == "Exportar"){
+          $.ajax({
+              type: 'GET',
+              url: '/export_product',
+              success: function(data){
+                $('.container_method').html(data);
+              }
+          });
+        }
+    });
+  }   
+</script>
+<%- include layouts/footer.ejs %>

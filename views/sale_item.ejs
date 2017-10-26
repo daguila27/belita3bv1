@@ -1,0 +1,48 @@
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+<%if(data.length == 0){%>
+    <h1 style="text-align: center;">Venta no registrada o eliminada</h1>
+<%}
+else{
+    var mes = parseInt(data[0].fecha.getMonth()) + 1;
+    var f = data[0].fecha.getDate()+"/"+mes+"/"+data[0].fecha.getFullYear();%>
+    <ul id="container_provider">
+        <li class='list-group-item'>
+        <input type="hidden" id="idVenta" value="<%=data[0].id_venta%>">
+        <input type="hidden" id="type" value="<%=type%>">
+          <div class="dib">
+              <h4><b>Numero de Venta:</b> #<%=data[0].id_venta%></h4>
+              <h4><b>Fecha:</b> <%=f%></h4>
+          </div>
+          <div class="dib">
+              <%if(data[0].rutCliente == null){%><h4><b>Cliente:</b> No registrado</h4><%}
+                else{%><h4><b>Cliente:</b> <%=data[0].nombreCliente%></h4><%}%>
+              <h4><b>Vendedor:</b> <%=data[0].nombreVendedor%></h4>
+              </div>
+              <div class="dib">
+                    <h4><b>Metodo de Pago: </b><%=data[0].pago%></h4>
+                    <h4><b>Monto Total: </b>$<%=data[0].monto%></h4>
+              </div>
+              <%if(type == 0){%>
+                <div class="delete">
+                      <button class='btn btn-default' type="button"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button>
+                </div>
+              <%}%>
+          </li>
+    </ul>
+
+
+    <ul id="container_product">
+    </ul>
+
+    <script type="text/javascript">
+      $.ajax({
+        type: 'POST',
+        data: {'idVenta': $('#idVenta').val(), 'type': $('#type').val()},
+        url: '/colect_product',
+        success: function(data){
+            $('#container_product').html(data);
+        }
+      });
+    </script>
+<%}%>

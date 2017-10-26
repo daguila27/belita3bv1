@@ -1,0 +1,25 @@
+
+
+<%- include layouts/admin_header.ejs %>
+<link href="/assets/css/style_facture_list.css" rel="stylesheet">
+
+
+
+<h1 class="page-header">Facturas:</h1>
+
+<!--<a href="/delete_all_facture" class="Borrar">Borrar Todo</a>-->
+<div class="col-md-12 col-sm-12">
+    <div class="table_facture"></div>
+</div>
+
+
+<script type="text/javascript">
+    $.ajax({
+        type: 'GET',
+        url: '/table_facture',
+        success: function(data){
+            $('.table_facture').html(data);
+        }
+    });
+</script>
+<%- include layouts/footer.ejs %>

@@ -1,0 +1,41 @@
+<div class="input_product">
+        <label>Ingrese Producto:</label>
+          <div class="input-group" id="input_tags">
+  		        <span class="input-group-addon" id="basic-addon1"></span>
+  		        <input name="Codigo" id="CodigoProducto" type="text" class="form-control" placeholder="Codigo Barra" aria-describedby="basic-addon1">
+      		</div>
+          <div class="input-group">
+  		      <span class="input-group-addon" id="basic-addon1"></span>
+  		      <input name="Precio" id="PrecioProducto" type="text" class="form-control" placeholder="Precio de Liquidación" aria-describedby="basic-addon1">
+  		    </div>
+
+          <div style="width: 100%">
+            <button type="button" id="regist_liq" class="btn btn-success">Registrar</button>
+          </div>
+
+</div>
+
+<div class="liq_container"></div>
+
+<script type="text/javascript">
+    $.ajax({
+              type: 'POST',
+              data: {'codigo': $('#CodigoProducto').val(), 'precio': $('#PrecioProducto').val()},
+              url: '/registLiq',
+              success: function(data){
+                  $('.liq_container').html(data);
+              }
+            });
+    $('#regist_liq').on('click', function(e){
+            $.ajax({
+              type: 'POST',
+              data: {'codigo': $('#CodigoProducto').val(), 'precio': $('#PrecioProducto').val()},
+              url: '/registLiq',
+              success: function(data){
+                  alert('Liquidación registrada correctamente.');
+                  $('.liq_container').html(data);
+              }
+            });
+    });
+    
+</script>

@@ -1,0 +1,220 @@
+
+<%if(login_admin){%>
+	<%- include layouts/admin_header.ejs %>
+<%}
+else{%>
+	<%- include layouts/user_header.ejs%>
+<%}%>
+<script type="text/javascript" src="/assets/js/funciones.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/css/style_sale.css">
+<h1 class="page-header">Nueva Venta:</h1>
+<div style="margin-bottom: 50px">
+        <label>Ingrese Producto:</label>	
+      	  	<div class="input-group" id="input_tags">
+		        <span class="input-group-addon" id="basic-addon1"></span>
+		        <input data-role="tagsinput" id="CodigoProduct" type="text" class="form-control" placeholder="Codigo de barra" aria-describedby="basic-addon1">
+    		</div>
+</div>
+		
+        <label>Ingrese Rut Vendedor:</label>
+			<div class="input-group" id="input_tags">
+		        <span class="input-group-addon" id="basic-addon1"></span>
+		        <input id="CodigoVendedor" name="CodigoVendedor" type="number" class="form-control" placeholder="Rut del vendedor" aria-describedby="basic-addon1" value=''>
+    		</div>
+    		<div id="div_seller">
+    			
+    		</div> 	
+    		<label>Ingrese Rut Cliente:</label>
+      	  	<div class="input-group" id="input_tags">
+		        <span class="input-group-addon" id="basic-addon1"></span>
+		        <input id="CodigoCliente"  name="CodigoCliente" type="text" class="form-control" placeholder="Rut del cliente" aria-describedby="basic-addon1">
+    		</div>
+    		<div id="div_client">
+    			
+    		</div>
+
+
+<div class="container_list">
+    
+</div>
+
+
+<div class="product_container">
+	
+</div>
+
+<div class="Diferencia"></div>
+<form method='post' action='/finish_sale' id="formulario">
+<div>
+	<input type="hidden" id="diferencia" name="diferenciaSaldo">	
+	<input type="hidden" id="rutvendedor" name="CodigoVendedor">
+	<input type="hidden" id="rutcliente" name="CodigoCliente">
+	<input type="hidden" id="Saldo" name="SaldoMonedero">
+	<div class="pago">
+            <p style="display:block; margin: 15px;">Metodo de pago:</p>
+            <select name="pago" class="form-control" style="width: 200px; display:block; margin:15px">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Credito">Credito</option>
+                <option value="Debito">Debito</option>    
+            </select>
+      </div>
+    
+</div>
+</form>
+<button class='btn btn-default' id="enviarFormulario">
+	              <span class='glyphicon glyphicon-check' aria-hidden='true'></span>  Terminar Venta
+	    </button>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on('click', '.delete',function(e){
+			e.preventDefault();
+			var indice = $(this).attr('id');
+			console.log($(this).attr('id'));
+        	$.ajax({
+          		type: 'POST',
+          		data: {'indice': parseInt(indice), 'precio': $('#precio'+indice).val() },
+          		url: '/remove_product',
+          		success: function(data){
+          			$('.container_list').html(data);
+          		}
+        	});
+   		});
+		$.ajax({
+			type: 'GET',
+			url: '/render_sale',
+			success: function(data){
+				$('.container_list').html(data);
+			}
+		});
+
+
+		$('#CodigoProduct').focus();
+		
+		//codFactura(largo 5)+000008+001
+		//99999999999999
+		$('#CodigoProduct').on('keyup', function(e){
+			e.preventDefault();
+			if($('#CodigoProduct').val().length == 16){
+				$('#CodigoProduct').prop('disabled', true);
+			$.ajax({
+				type: 'POST',
+				data: {'find_code': $('#CodigoProduct').val()},
+				url: '/find_product_sale',
+				success: function(data){
+					if(data == 'ok'){
+						$.ajax({
+							type: 'POST',
+							data: {'codigo':  $('#CodigoProduct').val()},
+							url: '/add_product',
+							success: function(data){
+								$('.container_list').html(data);
+								$('#CodigoProduct').val("");
+								$('#CodigoProduct').prop('disabled', false);
+								$('#CodigoProduct').focus();
+							}
+						});
+					}
+					else if(data == 'ok-externo'){
+						console.log("Enviando ajax a belita3");
+						$.ajax({
+							type: 'POST',
+							data: {'codigo':  $('#CodigoProduct').val()},
+							url: '/add_product_other',
+							success: function(data){
+								$('.container_list').html(data);
+								$('#CodigoProduct').val("");
+								$("#CodigoProduct").prop('disabled', false);
+								$('#CodigoProduct').focus();
+							}
+						});	
+					}
+				}
+			});
+		}
+		});
+		
+		$('#CodigoVendedor').on('keyup', function(e){
+			e.preventDefault();
+			var code = $('#CodigoVendedor').val();
+			$.ajax({
+				type: 'POST',
+				data: {'find_rut': code},
+				url: '/find_seller',
+				success: function(data){
+					if(data == 0){
+						$('#rutvendedor').val('');
+						$('#div_seller h3').remove();
+					}	
+					else{
+						$('#rutvendedor').val(data[0].rutVendedor);
+						$('#div_seller h3').remove();
+						$('#div_seller').append("<h3>Nombre del Vendedor: " + data[0].nombreVendedor +"</h3>");
+						$.ajax({
+							type: 'POST',
+							data: {'rut': data[0].rutVendedor},
+							url: '/sessionSeller',
+							success: function(data){
+								console.log(data);
+							}
+						});
+					}
+				} 
+			});
+
+
+
+		});
+		$('#CodigoCliente').on('keyup', function(e){
+			e.preventDefault();
+			var code = $('#CodigoCliente').val();
+			$.ajax({
+				type: 'POST',
+				data: {'find_rut': code},
+				url: '/find_client',
+				success: function(data){
+					console.log("Cliente encontrado:" + data);
+					if(data.length == 0){
+						$('#rutcliente').val('');
+						$('#div_client div').remove();
+					}
+					else{
+						$('#rutcliente').val(data[0].rutCliente);
+						$('#Saldo').val(data[0].monedero);
+						$('#div_client h3').remove();
+						$('#div_client').append("<div style='display: flex; width: 90%'><h3 style='width: 50%'><b>Nombre del cliente: </b>" + data[0].nombreCliente + "</h3><h3 style='margin-right: 25px'><b>Saldo: </b>$" + data[0].monedero + "</h3><label style='margin-top: 22px;' class='checkbox-inline'><input type='checkbox' value='false' id='checkSaldo'>Usar Saldo</label></div>");
+					}
+				}
+			});
+		});
+		$(document).on('click', '#checkSaldo', function(e){
+			if($('#checkSaldo').val() == 'true'){
+				$('#checkSaldo').val('false');
+				$('.Diferencia h3').remove();
+			}
+			else if($('#checkSaldo').val() == 'false'){
+				$('#checkSaldo').val('true');
+				var saldo = parseInt($('#Saldo').val());
+				$.ajax({
+					type: 'POST',
+					data: {'saldo': saldo},
+					url: '/reSaldo',
+					success: function(data){
+						$('.Diferencia').html("<h5>Diferencia: $" + data + "</h5>")
+					}
+				});
+			}
+		});
+		$(document).on('click', '#enviarFormulario', function(e){
+			e.preventDefault();
+			if($('#CodigoVendedor').val() == ''){
+				alert('Ingrese el Rut del vendedor');
+			}
+			else{
+				$('#formulario').submit();
+			}
+		});
+	});
+</script>
+
+<%- include layouts/footer.ejs %>

@@ -1,0 +1,35 @@
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style_providers.css">
+
+<ul id="container_provider">
+  <%for(var i=0; i < data.length; i++){%>
+      <li class='list-group-item' id="<%=data[i].rutCliente%>">
+      	<div class="dib">
+          <h4><b>Nombre:</b> <%=data[i].nombreCliente%></h4>
+          <h4><b>Rut:</b> <%=data[i].rutCliente%></h4>
+          <h4><b>Monedero:</b> $<%=data[i].monedero%></h4>
+        </div>
+        <div class="dib">
+          <h5><b>Mail:</b> <%=data[i].mail%></h5>
+          <h5><b>Telefono:</b> <%=data[i].telefono%></h5>
+          <h5><b>Fecha de Nacimiento: </b><%=data[i].fecha_nacimiento%></h5>
+        </div>
+      	<div class="buttons">
+      	<div class="barcod" data-rut="<%=data[i].rutCliente%>">
+              <form method="post" action="/rutCodes">
+                  <input type="hidden" name="nombre" value="<%=data[i].nombreCliente%>">
+                  <input type="hidden" name="rut" value="<%=data[i].rutCliente%>">
+                  <button class='btn btn-default' type="submit">
+                    <span class='glyphicon glyphicon-barcode' aria-hidden='true'></span>
+                  </button>
+                </form>
+        </div>  
+      	<div class="delete" data-rut="<%=data[i].rutCliente%>">
+            <button class='btn btn-default' type="button"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button>
+        </div>
+      
+      	</div>
+      </li>
+  <%}%>
+</ul>
+

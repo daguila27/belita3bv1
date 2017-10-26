@@ -1,0 +1,12 @@
+incluir a la venta:
+	->datos del cliente.
+	->metodo de pago.
+	->
+
+incluir al inventario de factura:
+	-> Columna con el precio unitario de costo de cada producto, respecto a la cantidad de articulos  que haya en el lote.	
+
+
+
+incluir administrador:
+	->permisos distintos a los vendedores.

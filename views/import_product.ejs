@@ -1,0 +1,74 @@
+<h3 style="margin-left: 20px">Importar producto:</h3>
+<div class="input-group" id="input_tags" style="margin-bottom: 9px">
+    <span class="input-group-addon" id="basic-addon1"></span>
+    <input id="CodigoProducto" type="text" class="form-control" placeholder="Codigo de Producto" aria-describedby="basic-addon1">
+</div>
+
+<div class="container_details"></div>
+
+<div class="input-group">
+	<span class="input-group-addon" id="basic-addon1"></span>
+    <input id="CantidadImport" type="number" class="form-control" placeholder="Cantidad" aria-describedby="basic-addon1">
+</div>
+<div style="width: 100%; margin-top: 10px">
+    <button type="button" id="regist_import" class="btn btn-success">Importar Productos</button>
+</div>
+
+
+<div style="margin-top: 30px" class="container_import"></div>
+
+<script type="text/javascript">
+	$.ajax({
+		type: 'GET',
+		url: '/render_import',
+		success: function(data){
+			$('.container_import').html(data);
+		}
+	});
+	$('#CodigoProducto').on('keyup', function(e){
+		var code = $('#CodigoProducto').val().toString();
+		if(code.length == 16){
+			$('#CodigoProducto').prop('disabled', true);
+			$.ajax({
+				type: 'POST',
+				data: {'codigo': $('#CodigoProducto').val()},
+				url: '/find_import',
+				success: function(data){
+					if(data == 'nope'){
+						alert("Codigo Invalido");
+						$('#CodigoProducto').prop('disabled', false);
+					}
+					else{
+						$('.container_details').html(data);
+						$('#CodigoProducto').prop('disabled', false);
+					}
+				}
+			});
+		}
+	});
+	$('#regist_import').on('click', function(e){
+		e.preventDefault();
+		var codigo = $('#CodigoProducto').val().toString();
+		var cantidad = $('#CantidadImport').val();
+		/*var nombre = $('#NombreProduct').val().toString();
+		var precio = $('#PrecioImport').val().toString();*/
+		if(codigo.length > 0){
+
+			$.ajax({
+				type: 'POST',
+				data: {'codigo': codigo, 'cantidad': cantidad},
+				url: '/import_add',
+				success: function(data){
+					if(data == 'invalido'){alert("Codigo invalido");}
+					else{
+						alert("Producto importado correctamente");
+						$('.container_import').html(data);
+					}
+				}
+			});
+		}
+		else{
+			alert("Complete los campos vacios");
+		}
+	});
+</script>

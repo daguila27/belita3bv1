@@ -1,0 +1,26 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "less": "/views/assets/less/main.less",
+  "style": "/node_modules/bootstrap/dist/css/bootstrap.css",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "ejs": "^1.0.0",
+    "escpos": "^2.4.3",
+    "express": "3.5.1",
+    "express-myconnection": "1.0.4",
+    "flash": "^1.1.0",
+    "ipp-printer": "^1.0.0",
+    "jade": "*",
+    "jimp": "^0.2.27",
+    "jsreport": "^1.8.2",
+    "mysql": "2.2.0",
+    "node-jre": "^0.2.1",
+    "npos": "^0.1.18",
+    "passport": "^0.3.2"
+  }
+}

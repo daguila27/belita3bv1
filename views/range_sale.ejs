@@ -1,0 +1,59 @@
+<ul id="container_provider">
+  <%var montoTotal = 0;
+    var cantidad = 0;
+  for(var j=0; j< data.length; j++){
+            if(j != data.length-1){
+              if(data[j].rutVendedor != data[j+1].rutVendedor){
+                montoTotal += data[j].monto;
+                cantidad += 1;
+                %>
+              <li class='list-group-item'>
+                  <div class="dib">
+                    <h4><b>Vendedor:</b> <%=data[j].nombreVendedor%></h4>
+                  </div>
+                  <div class="dib">
+                    <h4><b>Monto Total: </b>$<%=montoTotal%></h4>
+                  </div>
+                  <div class="dib">
+                    <h4><b>Cantidad de ventas: </b><%=cantidad%></h4>
+                  </div>
+                  <div>
+                    <form method="get" action="/details_seller/<%=data[j].rutVendedor%>">
+                      <button class='btn btn-default'>
+                        <span class='glyphicon glyphicon-th-list' aria-hidden='true'></span>  Detalles
+                      </button>
+                    </form>
+                  </div>
+                </li>
+              <%montoTotal = 0;
+                cantidad = 0;
+              }
+              else{
+                montoTotal += data[j].monto;
+                cantidad += 1;  
+              }
+            }
+            else{
+              montoTotal += data[j].monto;
+              cantidad += 1;%>
+              <li class='list-group-item'>
+                  <div class="dib">
+                    <h4><b>Vendedor:</b> <%=data[j].nombreVendedor%></h4>
+                  </div>
+                  <div class="dib">
+                    <h4><b>Monto Total: </b>$<%=montoTotal%></h4>
+                  </div>
+                  <div class="dib">
+                    <h4><b>Cantidad de ventas: </b><%=cantidad%></h4>
+                  </div>
+                  <div>
+                    <form method="get" action="/details_seller/<%=data[j].rutVendedor%>">
+                      <button class='btn btn-default'>
+                        <span class='glyphicon glyphicon-th-list' aria-hidden='true'></span>  Detalles
+                      </button>
+                    </form>
+                  </div>
+                </li>
+          <%}
+        }%>
+</ul>
