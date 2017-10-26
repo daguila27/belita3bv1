@@ -616,7 +616,8 @@ exports.finish_sale = function(req, res){
 							id_venta: insertId,
 							codigo_producto: req.session.codeProducts[i],
 							precio: productos[i].precioFinal,
-							id_producto: parseInt(req.session.codeProducts[i].substring(7, 13))
+							id_producto: parseInt(req.session.codeProducts[i].substring(7, 13)),
+							nombre_producto: productos[i].nombre
 						};
 					}
 					else{
@@ -624,7 +625,8 @@ exports.finish_sale = function(req, res){
 							id_venta: insertId,
 							codigo_producto: req.session.codeProducts[i],
 							precio: productos[i].precio,
-							id_producto: parseInt(req.session.codeProducts[i].substring(7, 13))
+							id_producto: parseInt(req.session.codeProducts[i].substring(7, 13)),
+							nombre_producto: productos[i].nombre
 						};
 					}
 					connection.query('INSERT INTO ventaproducto SET ?', dataProduct, function(err, rows){
@@ -702,7 +704,7 @@ exports.fillDate = function(req, res){
 		connection.query('', function(err, rows){
 			if(err)
 				console.log("Error Selecting : %s", err);
-			res.render('fill_date_table', {data: rows});
+			res.render('fill_date_table');
 			
 		});
 	});

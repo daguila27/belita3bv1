@@ -5,7 +5,7 @@
 <%}
 else{
     var mes = parseInt(data[0].fecha.getMonth()) + 1;
-    var f = data[0].fecha.getDate()+"/"+mes+"/"+data[0].fecha.getFullYear();%>
+    var f = data[0].fecha.getDate()+"/"+mes+"/"+data[0].fecha.getFullYear()+" "+" "+data[0].fecha.getHours()+":"+data[0].fecha.getMinutes();%>
     <ul id="container_provider">
         <li class='list-group-item'>
         <input type="hidden" id="idVenta" value="<%=data[0].id_venta%>">

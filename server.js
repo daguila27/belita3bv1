@@ -90,6 +90,7 @@ app.post('/barCodes', index.codes);
 app.post('/rutCodes', index.rutCodes);
 app.get('/admin_login', index.to_login);
 app.get('/changePass', index.changePass);
+app.get('/arreglarBase', index.setNombresVentas);
 
 
 

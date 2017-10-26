@@ -45,21 +45,21 @@ else{%>
 
 <div class="Diferencia"></div>
 <form method='post' action='/finish_sale' id="formulario">
-<div>
-	<input type="hidden" id="diferencia" name="diferenciaSaldo">	
-	<input type="hidden" id="rutvendedor" name="CodigoVendedor">
-	<input type="hidden" id="rutcliente" name="CodigoCliente">
-	<input type="hidden" id="Saldo" name="SaldoMonedero">
-	<div class="pago">
-            <p style="display:block; margin: 15px;">Metodo de pago:</p>
-            <select name="pago" class="form-control" style="width: 200px; display:block; margin:15px">
-                <option value="Efectivo">Efectivo</option>
-                <option value="Credito">Credito</option>
-                <option value="Debito">Debito</option>    
-            </select>
-      </div>
-    
-</div>
+	<div>
+		<input type="hidden" id="diferencia" name="diferenciaSaldo">	
+		<input type="hidden" id="rutvendedor" name="CodigoVendedor">
+		<input type="hidden" id="rutcliente" name="CodigoCliente">
+		<input type="hidden" id="Saldo" name="SaldoMonedero">
+		<div class="pago">
+	            <p style="display:block; margin: 15px;">Metodo de pago:</p>
+	            <select name="pago" class="form-control" style="width: 200px; display:block; margin:15px">
+	                <option value="Efectivo">Efectivo</option>
+	                <option value="Credito">Credito</option>
+	                <option value="Debito">Debito</option>    
+	            </select>
+	      </div>
+	    
+	</div>
 </form>
 <button class='btn btn-default' id="enviarFormulario">
 	              <span class='glyphicon glyphicon-check' aria-hidden='true'></span>  Terminar Venta

@@ -398,7 +398,7 @@ exports.devolucion = function(req, res){
 }
 
 
-exports.colect = function(req, res){
+/*exports.colect = function(req, res){
 	var input = JSON.parse(JSON.stringify(req.body));
 	var arrayProduct = [];
 	req.getConnection(function(err, connection){
@@ -461,7 +461,23 @@ exports.colect = function(req, res){
 			}
 		});
 	});
+}*/
+
+
+
+exports.colect = function(req, res){
+	var input = JSON.parse(JSON.stringify(req.body));
+	var arrayProduct = [];
+	req.getConnection(function(err, connection){
+		connection.query('SELECT * FROM ventaproducto WHERE id_venta = ?', input.idVenta, function(err, rows){
+			if(err)
+				console.log("Error Selecting : %s", err);
+			res.render('details_product_sale', {data: rows, type: input.type});
+			
+		});
+	});
 }
+
 
 exports.traspaso = function(req, res){
 	res.render('traspaso_prendas', {page_title: 'Traspaso de prendas'})

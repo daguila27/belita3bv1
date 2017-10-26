@@ -3,7 +3,7 @@
   <%for(var j=0; j< data.length; j++){
       if(data[j].id_venta != null){
           var mes = parseInt(data[j].fecha.getMonth()) + 1;
-          var f = data[j].fecha.getDate()+"/"+mes+"/"+data[j].fecha.getFullYear();%>
+          var f = data[j].fecha.getDate()+"/"+mes+"/"+data[j].fecha.getFullYear()+" "+" "+data[j].fecha.getHours()+":"+data[j].fecha.getMinutes();%>
           <li class='list-group-item'>
               <div class="dib">
                 <h4><b>Numero de Venta:</b> #<%=data[j].id_venta%></h4>
